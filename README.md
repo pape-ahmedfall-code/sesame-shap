@@ -41,3 +41,97 @@ Plus précisément, ce projet vise à :
 - mettre en perspective ces résultats avec les travaux récents sur l'explicabilité et l'IA responsable.
 
 ---
+
+# Jeu de données
+
+## Origine des données
+
+Le projet s'appuie sur le jeu de données **COMPAS (Correctional Offender Management Profiling for Alternative Sanctions)**, largement utilisé dans la littérature scientifique pour l'étude de l'explicabilité, des biais algorithmiques et de l'équité des systèmes de Machine Learning.
+
+Les données proviennent d'évaluations réalisées auprès de personnes poursuivies par la justice pénale dans le comté de Broward (Floride, États-Unis). Elles regroupent des informations démographiques, judiciaires et criminelles utilisées pour estimer le risque de récidive.
+
+Ce jeu de données est devenu une référence académique à la suite de l'enquête menée par **ProPublica** en 2016, qui a soulevé des interrogations sur l'équité des prédictions produites par le système COMPAS.
+
+---
+
+## Variable cible
+
+L'objectif du projet est de prédire la variable :
+
+| Variable | Description |
+|----------|-------------|
+| **is_recid** | Indique si un individu a récidivé (1) ou non (0). |
+
+Il s'agit donc d'un **problème de classification binaire**.
+
+---
+
+## Variables utilisées
+
+Le modèle exploite plusieurs catégories d'informations :
+
+- **Caractéristiques démographiques**
+  - âge
+  - sexe
+  - origine ethnique
+  - catégorie d'âge
+
+- **Historique judiciaire**
+  - nombre d'antécédents judiciaires (*priors_count*)
+  - nombre de délits commis étant mineur
+  - nombre de délits mineurs
+  - nombre d'autres infractions
+
+- **Informations relatives à l'infraction**
+  - gravité de l'infraction (*charge_degree*)
+  - groupe d'infraction (*charge_group*)
+
+- **Scores COMPAS**
+  - *decile_score*
+  - *score_text*
+  - *v_decile_score*
+  - *v_score_text*
+
+Une variable de **cluster**, obtenue lors de l'analyse non supervisée, a également été intégrée afin de représenter différents profils d'individus.
+
+---
+
+## Variables sensibles
+
+Certaines variables sont considérées comme **sensibles**, car elles peuvent conduire à des différences de traitement entre groupes de population.
+
+Dans ce projet, les variables suivantes ont fait l'objet d'une attention particulière :
+
+| Variable | Raison |
+|----------|--------|
+| **race** | Étude des biais liés à l'origine ethnique |
+| **sex** | Analyse des différences entre hommes et femmes |
+| **age_cat** | Analyse selon les tranches d'âge |
+
+Ces variables ont été conservées lors de l'analyse des biais mais retirées lors de la phase de mitigation afin d'étudier leur influence sur les performances et l'équité du modèle.
+
+---
+
+## Caractéristiques générales du jeu de données
+
+Après les différentes étapes de nettoyage et de préparation des données, le jeu utilisé pour la modélisation présente les caractéristiques suivantes :
+
+- plusieurs milliers d'observations ;
+- un nombre limité de variables explicatives pertinentes ;
+- une cible relativement équilibrée entre les deux classes ;
+- un mélange de variables numériques et catégorielles nécessitant un prétraitement adapté.
+
+Cette diversité de variables justifie l'utilisation d'un pipeline de prétraitement combinant normalisation des variables numériques et encodage des variables catégorielles avant l'entraînement des modèles de Machine Learning.
+
+---
+
+## Limites du jeu de données
+
+Bien que très utilisé dans la recherche, le jeu de données COMPAS présente plusieurs limites.
+
+- Les données concernent une population localisée (Broward County, Floride) et ne sont donc pas nécessairement représentatives d'autres contextes judiciaires.
+- Certaines variables résultent elles-mêmes de décisions humaines pouvant déjà contenir des biais historiques.
+- Les scores COMPAS utilisés comme variables explicatives sont issus d'un algorithme propriétaire dont le fonctionnement détaillé n'est pas public.
+- Enfin, la notion de récidive dépend de nombreux facteurs sociaux, économiques et judiciaires qui ne sont pas entièrement représentés dans le jeu de données.
+
+Ces limites doivent être prises en compte lors de l'interprétation des résultats et justifient la réalisation d'une analyse approfondie de l'explicabilité et de l'équité du modèle.
