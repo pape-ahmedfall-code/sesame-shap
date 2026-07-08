@@ -135,3 +135,174 @@ Bien que très utilisé dans la recherche, le jeu de données COMPAS présente p
 - Enfin, la notion de récidive dépend de nombreux facteurs sociaux, économiques et judiciaires qui ne sont pas entièrement représentés dans le jeu de données.
 
 Ces limites doivent être prises en compte lors de l'interprétation des résultats et justifient la réalisation d'une analyse approfondie de l'explicabilité et de l'équité du modèle.
+
+---
+
+# Méthodologie
+
+Le projet a été développé selon une démarche classique de Data Science, allant de la compréhension des données jusqu'à l'évaluation de l'équité des modèles de Machine Learning. Chaque étape a été réalisée de manière progressive afin de garantir la qualité des analyses et la fiabilité des résultats.
+
+L'ensemble du workflow est résumé dans la figure ci-dessous :
+
+```
+Chargement des données
+        │
+        ▼
+Exploration et nettoyage
+        │
+        ▼
+Analyse exploratoire
+        │
+        ▼
+Clustering (K-Means)
+        │
+        ▼
+Prétraitement des données
+        │
+        ▼
+Entraînement des modèles
+        │
+        ▼
+Comparaison des performances
+        │
+        ▼
+Explicabilité (SHAP)
+        │
+        ▼
+Analyse des biais
+        │
+        ▼
+Atténuation des biais
+        │
+        ▼
+Comparaison avant / après mitigation
+```
+
+---
+
+## 1. Exploration et préparation des données
+
+La première étape a consisté à explorer le jeu de données afin de mieux comprendre sa structure et sa qualité.
+
+Les principales opérations réalisées sont les suivantes :
+
+- inspection des variables disponibles ;
+- analyse des types de données ;
+- recherche de valeurs manquantes et de doublons ;
+- étude des distributions des principales variables ;
+- analyse des corrélations entre variables.
+
+Cette phase a permis d'identifier les traitements nécessaires avant la modélisation.
+
+---
+
+## 2. Analyse exploratoire des données
+
+Une analyse exploratoire (EDA) a ensuite été réalisée afin de mieux caractériser la population étudiée.
+
+Plusieurs visualisations ont permis d'étudier :
+
+- la répartition des individus selon l'âge, le sexe et l'origine ethnique ;
+- la distribution des antécédents judiciaires ;
+- la distribution des scores COMPAS ;
+- les relations entre certaines variables explicatives et la variable cible.
+
+Cette étape a facilité la compréhension des données et orienté les choix réalisés lors de la modélisation.
+
+---
+
+## 3. Clustering
+
+Avant d'entraîner les modèles supervisés, une analyse non supervisée a été menée à l'aide de l'algorithme **K-Means**.
+
+Le nombre optimal de groupes a été déterminé grâce à la méthode du coude (*Elbow Method*).
+
+Les clusters obtenus ont ensuite été visualisés grâce à :
+
+- UMAP ;
+- t-SNE.
+
+Cette étape a permis d'identifier différents profils d'individus partageant des caractéristiques similaires. Le cluster obtenu a ensuite été intégré comme variable explicative dans les modèles de classification.
+
+---
+
+## 4. Prétraitement des données
+
+Les variables numériques et catégorielles ont nécessité des traitements différents avant l'entraînement des modèles.
+
+Les principales étapes du prétraitement sont :
+
+- normalisation des variables numériques à l'aide de **StandardScaler** ;
+- encodage des variables catégorielles avec **OneHotEncoder** ;
+- combinaison des traitements grâce à **ColumnTransformer** ;
+- séparation des données en ensembles d'entraînement et de test selon une stratégie stratifiée.
+
+Cette approche garantit un pipeline reproductible et limite les risques de fuite d'information entre les jeux d'entraînement et de test.
+
+---
+
+## 5. Modélisation
+
+Trois modèles de Machine Learning ont été entraînés puis comparés :
+
+| Modèle | Objectif |
+|---------|----------|
+| Régression Logistique | Modèle de référence simple et interprétable |
+| Random Forest | Ensemble d'arbres de décision robuste et performant |
+| Gradient Boosting | Méthode de boosting permettant d'améliorer progressivement les prédictions |
+
+Les modèles ont été évalués à l'aide de plusieurs métriques :
+
+- Accuracy ;
+- Precision ;
+- Recall ;
+- F1-score ;
+- ROC-AUC ;
+- matrice de confusion.
+
+Le **Random Forest** a obtenu les meilleures performances globales et a donc été retenu pour les analyses d'explicabilité et d'équité.
+
+---
+
+## 6. Explicabilité du modèle
+
+Afin de comprendre les décisions du modèle retenu, une analyse d'explicabilité a été réalisée avec la bibliothèque **SHAP (SHapley Additive exPlanations)**.
+
+Plusieurs visualisations ont été utilisées :
+
+- SHAP Summary Plot ;
+- SHAP Beeswarm Plot ;
+- SHAP Bar Plot ;
+- SHAP Waterfall Plot.
+
+Ces graphiques permettent d'identifier les variables les plus influentes et d'expliquer les prédictions réalisées par le modèle.
+
+---
+
+## 7. Analyse des biais
+
+L'équité du modèle a ensuite été évaluée selon plusieurs variables sensibles :
+
+- race ;
+- sex ;
+- age_cat.
+
+Plusieurs indicateurs ont été étudiés :
+
+- taux de prédictions positives ;
+- True Positive Rate (TPR) ;
+- False Positive Rate (FPR).
+
+Cette analyse permet de vérifier si certains groupes sont favorisés ou défavorisés par les décisions du modèle.
+
+---
+
+## 8. Atténuation des biais
+
+Une stratégie simple de mitigation a ensuite été mise en œuvre.
+
+Elle consiste à supprimer certaines variables sensibles lors de l'entraînement du modèle afin de réduire leur influence sur les prédictions.
+
+Le modèle a ensuite été réentraîné puis réévalué selon les mêmes indicateurs de performance et d'équité.
+
+Cette comparaison permet de mesurer le compromis entre performance prédictive et réduction des biais.
