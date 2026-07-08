@@ -304,3 +304,106 @@ Elle consiste à supprimer certaines variables sensibles lors de l'entraînement
 Le modèle a ensuite été réentraîné puis réévalué selon les mêmes indicateurs de performance et d'équité.
 
 Cette comparaison permet de mesurer le compromis entre performance prédictive et réduction des biais.
+
+---
+
+# Résultats obtenus
+
+## Comparaison des modèles
+
+Trois modèles de Machine Learning ont été entraînés et comparés afin d'identifier celui offrant le meilleur compromis entre performance prédictive, robustesse et capacité d'interprétation.
+
+Les performances obtenues sont résumées dans le tableau suivant.
+
+| Modèle | Accuracy | F1-score | ROC-AUC | Observation |
+|---------|:--------:|:--------:|:-------:|-------------|
+| Régression Logistique | ~0.70 | ~0.66 | ~0.77 | Modèle simple, facilement interprétable mais limité pour capturer les relations complexes entre variables. |
+| Gradient Boosting | ~0.72 | ~0.70 | ~0.80 | Meilleure capacité de généralisation que la régression logistique mais performances inférieures au Random Forest. |
+| Random Forest | **~0.91** | **~0.91** | **~0.97** | Meilleur modèle de l'étude, offrant les meilleures performances globales. |
+
+Les résultats montrent clairement que le **Random Forest** surpasse les deux autres modèles sur l'ensemble des métriques étudiées.
+
+Cette amélioration s'explique par sa capacité à modéliser des relations non linéaires, à gérer les interactions complexes entre variables et à réduire le risque de surapprentissage grâce à l'agrégation d'un grand nombre d'arbres de décision.
+
+Pour ces raisons, ce modèle a été retenu pour les analyses d'explicabilité et d'équité.
+
+---
+
+## Interprétation des prédictions avec SHAP
+
+Les performances d'un modèle ne suffisent pas à garantir sa fiabilité dans un contexte sensible comme la justice pénale. Il est également nécessaire de comprendre les raisons qui conduisent le modèle à produire une prédiction.
+
+Pour répondre à cette problématique, le projet utilise **SHAP (SHapley Additive exPlanations)**.
+
+L'analyse SHAP met en évidence les variables qui influencent le plus les décisions du modèle.
+
+Les principales variables explicatives sont notamment :
+
+- **priors_count** (nombre d'antécédents judiciaires) ;
+- **decile_score** ;
+- **v_decile_score** ;
+- **age** ;
+- **days_b_screening_arrest** ;
+- certaines variables décrivant les infractions.
+
+Les graphiques SHAP permettent d'observer :
+
+- l'importance globale de chaque variable ;
+- l'effet positif ou négatif de chaque variable sur la prédiction ;
+- l'explication individuelle d'une décision donnée.
+
+Cette analyse montre que le modèle ne prend pas ses décisions de manière arbitraire mais s'appuie principalement sur les informations liées aux antécédents judiciaires et aux évaluations du risque déjà présentes dans les données.
+
+---
+
+## Analyse des biais
+
+Une fois le modèle interprété, une analyse d'équité a été menée afin de vérifier si ses performances variaient selon différents groupes de population.
+
+L'étude porte principalement sur trois variables sensibles :
+
+- la race ;
+- le sexe ;
+- la tranche d'âge.
+
+Plusieurs indicateurs ont été calculés :
+
+- proportion de prédictions positives ;
+- True Positive Rate (TPR) ;
+- False Positive Rate (FPR).
+
+Les résultats montrent que les performances ne sont pas parfaitement homogènes entre les différents groupes.
+
+Des écarts apparaissent notamment concernant les taux de vrais positifs et de faux positifs selon certaines catégories démographiques.
+
+Ces différences illustrent une problématique classique en intelligence artificielle responsable : un modèle peut présenter d'excellentes performances globales tout en restant moins équitable pour certains groupes de population.
+
+---
+
+## Atténuation des biais
+
+Afin de limiter l'influence des variables sensibles sur les prédictions, une stratégie de mitigation a été mise en œuvre.
+
+Cette approche consiste à retirer certaines variables sensibles du processus d'entraînement du modèle, tout en les conservant uniquement pour l'évaluation de l'équité.
+
+Le modèle a ensuite été réentraîné puis comparé au modèle initial.
+
+Les résultats montrent que :
+
+- les performances prédictives diminuent légèrement ;
+- certains écarts observés entre groupes sont réduits ;
+- le modèle devient plus équilibré au regard des indicateurs d'équité.
+
+Cette expérience met en évidence un compromis bien connu en Machine Learning responsable : améliorer l'équité d'un modèle peut entraîner une légère diminution de ses performances prédictives.
+
+---
+
+## Enseignements principaux
+
+Les principaux enseignements de ce projet sont les suivants :
+
+- le **Random Forest** constitue le modèle le plus performant pour cette tâche de prédiction ;
+- **SHAP** fournit des explications précises permettant de comprendre les décisions du modèle ;
+- l'analyse d'équité révèle des différences de comportement entre certains groupes démographiques ;
+- la suppression des variables sensibles réduit une partie de ces écarts, mais ne les élimine pas totalement ;
+- l'explicabilité et l'équité doivent être considérées conjointement lors du développement de systèmes d'intelligence artificielle destinés à des domaines sensibles.
