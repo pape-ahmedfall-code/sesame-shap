@@ -541,3 +541,220 @@ Le choix s'est porté sur **SHAP** pour plusieurs raisons :
 - il est particulièrement adapté aux modèles d'ensemble tels que le **Random Forest** ;
 - il permet d'identifier les variables influençant les décisions individuelles ainsi que le comportement global du modèle ;
 - il est aujourd'hui considéré comme l'une des références en matière d'explicabilité des modèles de Machine Learning.
+
+---
+
+# Limites des méthodes d'explicabilité
+
+Les méthodes d'explicabilité constituent aujourd'hui des outils indispensables pour comprendre le fonctionnement des modèles de Machine Learning. Toutefois, aucune d'entre elles n'est parfaite et chacune présente des limites qu'il convient de connaître avant leur utilisation dans des applications sensibles.
+
+## Limites de SHAP
+
+Bien que SHAP soit considéré comme l'une des méthodes les plus robustes d'explicabilité, plusieurs limites doivent être prises en compte.
+
+### Sensibilité à la baseline
+
+Les explications produites par SHAP dépendent d'une **valeur de référence (baseline)** servant de point de comparaison.
+
+Selon le choix de cette baseline, les contributions attribuées aux variables peuvent varier. Deux analyses réalisées avec des références différentes peuvent ainsi conduire à des interprétations légèrement différentes.
+
+### Coût computationnel
+
+Le calcul exact des valeurs de Shapley nécessite d'évaluer toutes les combinaisons possibles de variables.
+
+Ce coût augmente de manière exponentielle avec le nombre de variables. En pratique, SHAP utilise donc des approximations (comme TreeSHAP pour les modèles à base d'arbres) afin de réduire considérablement le temps de calcul.
+
+### Variables corrélées
+
+Lorsque plusieurs variables sont fortement corrélées, SHAP peut répartir leur importance entre elles.
+
+Il devient alors difficile d'identifier laquelle est réellement responsable d'une décision, car les contributions sont partagées entre des variables apportant une information similaire.
+
+### Interprétation
+
+Les graphiques SHAP restent relativement techniques et nécessitent une bonne compréhension des modèles de Machine Learning. Ils peuvent donc être difficiles à interpréter pour des utilisateurs non spécialistes.
+
+---
+
+## Limites de LIME
+
+LIME présente plusieurs limites importantes.
+
+- Les explications sont uniquement locales.
+- Les résultats peuvent varier entre deux exécutions.
+- La qualité de l'explication dépend fortement des données artificielles générées autour de l'observation étudiée.
+- Il n'existe pas de garantie que les explications locales reflètent fidèlement le comportement global du modèle.
+
+---
+
+## Limites de SAGE
+
+SAGE fournit une excellente mesure globale de l'importance des variables mais présente également plusieurs inconvénients.
+
+- Temps de calcul élevé.
+- Difficulté d'interprétation au niveau individuel.
+- Peu adapté lorsque l'objectif est d'expliquer une décision précise concernant un individu.
+
+---
+
+## Limites de DiCE
+
+Les explications contrefactuelles proposées par DiCE sont particulièrement intuitives mais présentent plusieurs difficultés.
+
+- Certaines modifications proposées peuvent être irréalistes dans la pratique.
+- Toutes les variables ne sont pas modifiables (âge, origine, sexe...).
+- La génération de contrefactuels plausibles peut devenir coûteuse pour des modèles complexes.
+
+---
+
+## Synthèse
+
+Aucune méthode d'explicabilité ne constitue une solution universelle.
+
+Le choix dépend principalement :
+
+- du type de modèle utilisé ;
+- du niveau d'explication souhaité (locale ou globale) ;
+- des contraintes de calcul ;
+- du public auquel les explications sont destinées.
+
+Dans ce projet, SHAP représente le meilleur compromis entre rigueur théorique, qualité des explications et compatibilité avec le modèle Random Forest.
+
+---
+
+# L'IA explicable et l'AI Act européen
+
+## L'AI Act : vers une intelligence artificielle responsable
+
+L'**AI Act** est le premier règlement européen encadrant le développement et l'utilisation des systèmes d'intelligence artificielle.
+
+Adopté par l'Union européenne en 2024, il vise à garantir que les systèmes d'IA soient :
+
+- sûrs ;
+- transparents ;
+- explicables ;
+- respectueux des droits fondamentaux ;
+- non discriminatoires.
+
+Le règlement classe les systèmes d'IA selon leur niveau de risque.
+
+Les applications utilisées dans :
+
+- la justice ;
+- la santé ;
+- l'éducation ;
+- le recrutement ;
+- les services publics,
+
+sont considérées comme des **systèmes d'IA à haut risque**.
+
+Le système COMPAS étudié dans ce projet appartient clairement à cette catégorie puisqu'il peut influencer des décisions judiciaires concernant des individus.
+
+---
+
+## L'article 13 : l'obligation de transparence
+
+L'article 13 de l'AI Act impose que les systèmes d'IA à haut risque soient suffisamment transparents pour permettre à leurs utilisateurs de comprendre leur fonctionnement.
+
+Les développeurs doivent notamment fournir :
+
+- une description du fonctionnement du système ;
+- les caractéristiques principales influençant les décisions ;
+- les limites du modèle ;
+- les performances attendues ;
+- les risques connus ;
+- les conditions d'utilisation appropriées.
+
+L'objectif n'est pas d'expliquer l'ensemble du code source mais de permettre aux utilisateurs humains de comprendre les décisions produites par le système.
+
+---
+
+## Apport des méthodes d'explicabilité
+
+Les méthodes d'explicabilité répondent directement à plusieurs exigences de l'AI Act.
+
+Par exemple :
+
+- SHAP identifie les variables ayant le plus contribué à une décision ;
+- LIME explique localement une prédiction particulière ;
+- SAGE mesure l'importance globale des variables ;
+- DiCE propose des scénarios contrefactuels permettant de comprendre comment une décision pourrait être différente.
+
+Ces outils améliorent considérablement la transparence des modèles de Machine Learning.
+
+---
+
+## Les limites de ces approches
+
+Même si ces méthodes constituent une avancée importante, elles ne suffisent pas à elles seules à satisfaire toutes les exigences de l'AI Act.
+
+En effet :
+
+- une explication n'élimine pas les biais du modèle ;
+- un modèle explicable peut rester discriminatoire ;
+- certaines explications restent difficiles à comprendre pour un utilisateur non spécialiste ;
+- les méthodes d'explicabilité n'offrent aucune garantie juridique sur l'équité des décisions.
+
+L'explicabilité constitue donc un outil d'aide à la transparence, mais ne remplace pas les procédures d'audit, de gouvernance des données et de contrôle humain exigées par le règlement européen.
+
+---
+
+## Application au projet
+
+Dans ce projet, l'utilisation de SHAP a permis :
+
+- d'identifier les variables les plus influentes du modèle Random Forest ;
+- d'expliquer les décisions individuelles ;
+- de comprendre les facteurs pouvant contribuer aux biais observés.
+
+L'analyse d'équité a ensuite complété cette approche en évaluant les performances du modèle selon plusieurs groupes démographiques.
+
+Cette combinaison entre explicabilité et mesure de l'équité illustre la démarche recommandée par l'AI Act pour les systèmes d'intelligence artificielle à haut risque.
+
+--- 
+
+# Conclusion
+
+Ce projet a permis de mettre en œuvre l'ensemble des étapes d'un projet complet de Data Science, depuis l'exploration des données jusqu'à l'évaluation de l'équité d'un modèle de Machine Learning.
+
+Après une phase de nettoyage, d'analyse exploratoire et de clustering, plusieurs modèles de classification ont été entraînés et comparés. Le modèle **Random Forest** a obtenu les meilleures performances et a été retenu pour les analyses d'explicabilité et d'équité.
+
+L'utilisation de **SHAP** a permis de mieux comprendre les décisions du modèle en identifiant les variables les plus influentes. Les analyses réalisées montrent que les performances globales d'un modèle ne suffisent pas à garantir son utilisation dans un contexte sensible.
+
+L'étude des biais a mis en évidence des différences entre certains groupes de population. Une stratégie de mitigation a permis de réduire une partie de ces écarts, tout en illustrant le compromis classique entre performance prédictive et équité.
+
+Enfin, la veille technologique réalisée autour de SHAP, LIME, SAGE, DiCE, du théorème de Chouldechova et de l'AI Act européen montre que l'intelligence artificielle responsable ne repose pas uniquement sur la performance des modèles, mais également sur leur transparence, leur explicabilité et leur capacité à limiter les discriminations.
+
+Ce projet illustre ainsi l'importance d'intégrer des méthodes d'explicabilité et d'évaluation de l'équité dans le développement des systèmes de Machine Learning destinés à des domaines à fort impact sociétal.
+
+---
+
+# Références
+
+## Jeu de données
+
+- ProPublica. *Machine Bias*. 2016.
+- COMPAS Dataset – ProPublica.
+
+## Articles scientifiques
+
+- Lundberg, S. M., & Lee, S.-I. (2017). *A Unified Approach to Interpreting Model Predictions (SHAP).* NeurIPS.
+
+- Ribeiro, M. T., Singh, S., & Guestrin, C. (2016). *"Why Should I Trust You?" Explaining the Predictions of Any Classifier (LIME).* KDD.
+
+- Covert, I., Lundberg, S., & Lee, S.-I. (2020). *Understanding Global Feature Contributions with Additive Importance Measures (SAGE).*
+
+- Mothilal, R., Sharma, A., & Tan, C. (2020). *Explaining Machine Learning Classifiers through Diverse Counterfactual Explanations (DiCE).* FAT* Conference.
+
+- Chouldechova, A. (2017). *Fair Prediction with Disparate Impact: A Study of Bias in Recidivism Prediction Instruments.*
+
+## Réglementation
+
+- Parlement européen. *Artificial Intelligence Act (AI Act).* 2024.
+
+## Documentation
+
+- SHAP Documentation
+- Scikit-learn Documentation
+- Pandas Documentation
+- NumPy Documentation
