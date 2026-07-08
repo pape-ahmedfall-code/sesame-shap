@@ -273,7 +273,6 @@ Plusieurs visualisations ont été utilisées :
 - SHAP Summary Plot ;
 - SHAP Beeswarm Plot ;
 - SHAP Bar Plot ;
-- SHAP Waterfall Plot.
 
 Ces graphiques permettent d'identifier les variables les plus influentes et d'expliquer les prédictions réalisées par le modèle.
 
@@ -289,7 +288,6 @@ L'équité du modèle a ensuite été évaluée selon plusieurs variables sensib
 
 Plusieurs indicateurs ont été étudiés :
 
-- taux de prédictions positives ;
 - True Positive Rate (TPR) ;
 - False Positive Rate (FPR).
 
