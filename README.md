@@ -366,9 +366,8 @@ L'étude porte principalement sur trois variables sensibles :
 - le sexe ;
 - la tranche d'âge.
 
-Plusieurs indicateurs ont été calculés :
+Deux indicateurs ont été calculés :
 
-- proportion de prédictions positives ;
 - True Positive Rate (TPR) ;
 - False Positive Rate (FPR).
 
@@ -407,3 +406,138 @@ Les principaux enseignements de ce projet sont les suivants :
 - l'analyse d'équité révèle des différences de comportement entre certains groupes démographiques ;
 - la suppression des variables sensibles réduit une partie de ces écarts, mais ne les élimine pas totalement ;
 - l'explicabilité et l'équité doivent être considérées conjointement lors du développement de systèmes d'intelligence artificielle destinés à des domaines sensibles.
+
+---
+
+# Veille technologique et algorithmique
+
+L'essor des modèles d'intelligence artificielle dans des domaines sensibles soulève une problématique essentielle : **comment expliquer et justifier les décisions prises par un algorithme ?**
+
+Au cours des dernières années, plusieurs méthodes d'explicabilité ont été développées afin de rendre les modèles de Machine Learning plus transparents. Parmi les plus utilisées figurent **SHAP**, **LIME**, **SAGE** et **DiCE**.
+
+Cette veille présente le principe de chacune de ces approches ainsi que leurs principaux avantages et limites.
+
+---
+
+## SHAP (SHapley Additive exPlanations)
+
+SHAP est une méthode d'explicabilité fondée sur la théorie des jeux coopératifs et plus précisément sur les **valeurs de Shapley**, proposées par Lloyd Shapley en 1953.
+
+L'idée consiste à considérer chaque variable comme un "joueur" participant à une prédiction. La contribution de chaque variable est calculée en estimant son influence moyenne sur le résultat final parmi toutes les combinaisons possibles de variables.
+
+SHAP permet ainsi de répondre à la question :
+
+> **Pourquoi le modèle a-t-il produit cette prédiction ?**
+
+### Avantages
+
+- explications locales et globales ;
+- forte base théorique ;
+- résultats cohérents ;
+- comparaison des variables facilitée ;
+- compatible avec de nombreux modèles de Machine Learning.
+
+### Limites
+
+- coût computationnel parfois élevé ;
+- sensibilité aux variables fortement corrélées ;
+- choix de la valeur de référence (baseline) pouvant influencer les explications ;
+- interprétation parfois complexe pour des utilisateurs non spécialistes.
+
+Dans ce projet, SHAP a été utilisé pour expliquer les décisions du modèle **Random Forest**, identifier les variables les plus influentes et analyser les facteurs contribuant aux biais observés.
+
+---
+
+## LIME (Local Interpretable Model-agnostic Explanations)
+
+LIME est une méthode d'explicabilité locale développée en 2016.
+
+Contrairement à SHAP, LIME ne cherche pas à expliquer l'ensemble du modèle mais uniquement une prédiction particulière.
+
+Pour cela, la méthode génère de nombreuses observations artificielles autour de l'individu étudié puis entraîne un modèle linéaire simple permettant d'approcher localement le comportement du modèle complexe.
+
+### Avantages
+
+- rapide à mettre en œuvre ;
+- indépendant du modèle utilisé ;
+- particulièrement adapté aux explications individuelles.
+
+### Limites
+
+- résultats pouvant varier d'une exécution à l'autre ;
+- forte dépendance au voisinage choisi ;
+- absence de garantie de cohérence globale ;
+- moins robuste que SHAP.
+
+---
+
+## SAGE (Shapley Additive Global Explanations)
+
+SAGE est une extension des valeurs de Shapley appliquée à l'évaluation globale des variables.
+
+Contrairement à SHAP qui explique principalement les prédictions, SAGE mesure directement la contribution de chaque variable aux performances globales du modèle.
+
+Il estime la perte de performance provoquée par la suppression d'une variable.
+
+### Avantages
+
+- mesure globale de l'importance des variables ;
+- applicable à différents modèles ;
+- interprétation plus stable à l'échelle du modèle.
+
+### Limites
+
+- coût computationnel important ;
+- calcul plus long que SHAP ;
+- moins adapté à l'explication individuelle.
+
+---
+
+## DiCE (Diverse Counterfactual Explanations)
+
+DiCE adopte une approche totalement différente.
+
+Au lieu d'expliquer pourquoi une décision a été prise, il cherche à répondre à la question :
+
+> **Que faudrait-il modifier pour obtenir une autre décision ?**
+
+Ces explications sont appelées **explications contrefactuelles**.
+
+Par exemple, un individu classé comme présentant un risque élevé de récidive pourrait obtenir une prédiction différente si certaines caractéristiques étaient modifiées.
+
+### Avantages
+
+- très intuitif ;
+- particulièrement adapté à l'aide à la décision ;
+- facilite la compréhension des décisions algorithmiques.
+
+### Limites
+
+- certaines recommandations peuvent être irréalistes ;
+- nécessité de définir quelles variables sont modifiables ;
+- coût de calcul parfois élevé.
+
+---
+
+## Comparaison des principales méthodes d'explicabilité
+
+| Méthode | Explication locale | Explication globale | Indépendante du modèle | Explications contrefactuelles |
+|---------|:------------------:|:-------------------:|:----------------------:|:-----------------------------:|
+| SHAP | ✅ | ✅ | ✅ | ❌ |
+| LIME | ✅ | ❌ | ✅ | ❌ |
+| SAGE | ❌ | ✅ | ✅ | ❌ |
+| DiCE | ✅ | ❌ | ✅ | ✅ |
+
+---
+
+## Pourquoi SHAP a été retenu dans ce projet ?
+
+Plusieurs méthodes auraient pu être utilisées.
+
+Le choix s'est porté sur **SHAP** pour plusieurs raisons :
+
+- il fournit des explications à la fois **locales** et **globales** ;
+- il repose sur une base théorique solide (valeurs de Shapley) ;
+- il est particulièrement adapté aux modèles d'ensemble tels que le **Random Forest** ;
+- il permet d'identifier les variables influençant les décisions individuelles ainsi que le comportement global du modèle ;
+- il est aujourd'hui considéré comme l'une des références en matière d'explicabilité des modèles de Machine Learning.
