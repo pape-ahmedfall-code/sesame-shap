@@ -1,1 +1,14 @@
+# Dataset
+
+Ce projet utilise le jeu de données **COMPAS** publié par ProPublica.
+
+Le jeu de données n'est pas inclus dans ce dépôt.
+
+Vous pouvez le télécharger depuis :
+
+https://github.com/propublica/compas-analysis
+
+Placez ensuite le fichier CSV dans ce dossier (`data/`) avant d'exécuter les notebooks.
+
+Exemple : data/
 
