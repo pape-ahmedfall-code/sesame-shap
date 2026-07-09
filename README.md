@@ -215,7 +215,9 @@ Cette étape a facilité la compréhension des données et orienté les choix r�
 
 Avant d'entraîner les modèles supervisés, une analyse non supervisée a été menée à l'aide de l'algorithme **K-Means**.
 
-Le nombre optimal de groupes a été déterminé grâce à la méthode du coude (*Elbow Method*).
+Le nombre optimal de groupes a été déterminé grâce à la méthode du coude (*Elbow Method*) et de Silhouette.
+<img width="622" height="470" alt="Choix du nbre de cluters" src="https://github.com/user-attachments/assets/2c4384cb-e5f7-4b32-a50c-252d16596ddb" />
+
 
 Les clusters obtenus ont ensuite été visualisés grâce à :
 
