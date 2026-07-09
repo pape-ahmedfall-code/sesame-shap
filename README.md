@@ -191,6 +191,8 @@ Les principales opérations réalisées sont les suivantes :
 - recherche de valeurs manquantes et de doublons ;
 - étude des distributions des principales variables ;
 - analyse des corrélations entre variables.
+  <img width="1065" height="839" alt="Matrice de corrélation" src="https://github.com/user-attachments/assets/ea54b9b6-5ea2-4dcf-85d1-082b2e104dc1" />
+
 
 Cette phase a permis d'identifier les traitements nécessaires avant la modélisation.
 
@@ -222,7 +224,11 @@ Le nombre optimal de groupes a été déterminé grâce à la méthode du coude 
 Les clusters obtenus ont ensuite été visualisés grâce à :
 
 - UMAP ;
+  <img width="688" height="547" alt="Projection UMAP des clusters K-Means" src="https://github.com/user-attachments/assets/cf0efc99-dc8f-424e-9a76-f8a91573d4c3" />
+
 - t-SNE.
+  <img width="697" height="547" alt="Projection t-SNE des clusters K-Means" src="https://github.com/user-attachments/assets/b78a5b62-1eb2-4182-baf2-2e2243399489" />
+
 
 Cette étape a permis d'identifier différents profils d'individus partageant des caractéristiques similaires. Le cluster obtenu a ensuite été intégré comme variable explicative dans les modèles de classification.
 
@@ -347,6 +353,10 @@ Les principales variables explicatives sont notamment :
 - **age** ;
 - **days_b_screening_arrest** ;
 - certaines variables décrivant les infractions.
+  <img width="776" height="740" alt="SHAP" src="https://github.com/user-attachments/assets/bcc75415-a3ab-4656-a257-65237a1084ee" />
+  
+<img width="790" height="740" alt="SHAP_bar" src="https://github.com/user-attachments/assets/63753d29-6cd7-4a08-ab96-c65585affd14" />
+
 
 Les graphiques SHAP permettent d'observer :
 
